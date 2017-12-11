@@ -1,0 +1,15 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<input type="range" min=0 max=100 id="a" ><br>
+<input type="range" id="b" >
+
+<script>
+    // y = x^2 * -0.003 + x * 0.85
+    $('#a').change(function() {
+        let x = $(this).val();
+        let y = x*x*(-0.003) + x*0.85
+        console.log(y);
+
+        $('#b').val(y)
+    });
+</script>
