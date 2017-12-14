@@ -37,7 +37,7 @@ setDisplays() {
 	newContrast=$(echo "$newBrightness * $newBrightness * -0.003 + $newBrightness * 0.85" | bc)
 
 	$lg4k -b $newBrightness -c $newContrast > /dev/null &
-	$lg1080 -b $newBrightness -c $(echo "$newContrast * 0.636363" | bc) > /dev/null &
+	$lg1080 -b $(echo "$newContrast * 0.8" | bc) -c $(echo "$newContrast * 0.636363 * 0.8" | bc) > /dev/null &
 
 	echo $newBrightness > current.txt
 	echo $newBrightness $newContrast
