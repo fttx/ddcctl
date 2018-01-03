@@ -4,10 +4,12 @@
 <input type="range" id="b" >
 
 <script>
-    // y = x^2 * -0.003 + x * 0.85
+    // https://www.desmos.com/calculator/enwojkytqj
+    // logb(x+c)-d
+    // b =1.01 c=35 d=420
     $('#a').change(function() {
         let x = $(this).val();
-        let y = x*x*(-0.003) + x*0.85
+        let y =  
         console.log(y);
 
         $('#b').val(y)
