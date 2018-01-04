@@ -27,16 +27,21 @@ setDisplays() {
 	current=$(cat current.txt)
 
 	if [[ "$1" == "up" ]] ; then
-		newBrightness=$((current+10))
+		newBrightness=$((current+8))
 	else 
-		newBrightness=$((current-10))
+		newBrightness=$((current-8))
 	fi
 
 	newBrightness=$(($newBrightness>100?100:$newBrightness))
 	newBrightness=$(($newBrightness<0?0:$newBrightness))	
-	newContrast=$(echo '-420+(l('$newBrightness'+35)/l(1.01))' | bc -l)
-	if ((  $(echo $newContrast'<0.0' | bc -l) )); then
-		newContrast=0
+	newContrast=$(echo "$newBrightness * 0.8" | bc)
+
+	if ((  $(echo $newBrightness'<70' | bc -l) )); then
+		newContrast=$(echo "20 + $newBrightness * 0.4" | bc)
+	fi
+
+	if ((  $(echo $newBrightness'<20' | bc -l) )); then
+		newContrast=$(echo "15 + $newBrightness * 0.5" | bc)
 	fi
 
 	$lg4k -b $newBrightness -c $newContrast > /dev/null &
