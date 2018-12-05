@@ -34,18 +34,22 @@ setDisplays() {
 
 	newBrightness=$(($newBrightness>100?100:$newBrightness))
 	newBrightness=$(($newBrightness<0?0:$newBrightness))	
-	newContrast=$(echo "$newBrightness * 0.8" | bc)
+	newContrast=$(echo "$newBrightness * 0.78" | bc)
 
 	if ((  $(echo $newBrightness'<70' | bc -l) )); then
-		newContrast=$(echo "20 + $newBrightness * 0.4" | bc)
+		newContrast=$(echo "30 + $newBrightness * 0.5" | bc)
+	fi
+
+	if ((  $(echo $newBrightness'<50' | bc -l) )); then
+		newContrast=$(echo "15 + $newBrightness * 0.9" | bc)
 	fi
 
 	if ((  $(echo $newBrightness'<20' | bc -l) )); then
-		newContrast=$(echo "15 + $newBrightness * 0.5" | bc)
+		newContrast=$(echo "20 + $newBrightness * 0.5" | bc)
 	fi
 
 	$lg4k -b $newBrightness -c $newContrast > /dev/null &
-	$lg1080 -b $(echo "$newContrast * 0.8" | bc) -c $(echo "$newContrast * 0.636363 * 0.8" | bc) > /dev/null &
+	$lg1080 -b $(echo "$newContrast * 0.7" | bc) -c $(echo "$newContrast * 0.6969 * 0.7" | bc) > /dev/null &
 
 	echo $newBrightness > current.txt
 	echo $newBrightness $newContrast
