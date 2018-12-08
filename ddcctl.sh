@@ -27,9 +27,9 @@ setDisplays() {
 	current=$(cat current.txt)
 
 	if [[ "$1" == "up" ]] ; then
-		newBrightness=$((current+8))
+		newBrightness=$((current+4))
 	else 
-		newBrightness=$((current-8))
+		newBrightness=$((current-4))
 	fi
 
 	newBrightness=$(($newBrightness>100?100:$newBrightness))
@@ -50,7 +50,7 @@ setDisplays() {
 
 	$lg4k -b $newBrightness -c $newContrast > /dev/null &
 	$lg1080 -b $(echo "$newContrast * 0.7" | bc) -c $(echo "$newContrast * 0.6969 * 0.7" | bc) > /dev/null &
-
+	/Applications/OSDisplay.app/Contents/MacOS/OSDisplay -i brightness -l $newBrightness -d 1.0	
 	echo $newBrightness > current.txt
 	echo $newBrightness $newContrast
 }
