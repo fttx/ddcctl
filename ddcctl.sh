@@ -13,6 +13,7 @@
 	
 lg4k="/usr/local/bin/ddcctl -d 1"
 lg1080="/usr/local/bin/ddcctl -d 2"
+BRIGHTNESS_FILE="/Users/filippo/.brightness"
 
 setDisplays() {
 	if [[ $# -lt 1 ]] ; then
@@ -20,28 +21,28 @@ setDisplays() {
 		exit 1
 	fi
 
-	if [[ ! -f "current.txt" ]]; then
-		echo '70' > current.txt
+	if [[ ! -f $BRIGHTNESS_FILE ]]; then
+		echo '70' > $BRIGHTNESS_FILE
 	fi
 	
-	current=$(cat current.txt)
-
+	current=$(cat $BRIGHTNESS_FILE)
 	if [[ "$1" == "up" ]] ; then
-		newBrightness=$((current+4))
+		newBrightness=$((current+10))
 	else 
-		newBrightness=$((current-4))
+		newBrightness=$((current-10))
 	fi
 
 	newBrightness=$(($newBrightness>100?100:$newBrightness))
 	newBrightness=$(($newBrightness<0?0:$newBrightness))	
-	newContrast=$(echo "$newBrightness * 0.78" | bc)
 
-	if ((  $(echo $newBrightness'<70' | bc -l) )); then
-		newContrast=$(echo "30 + $newBrightness * 0.5" | bc)
+	newContrast=$(echo "15 + $newBrightness * 0.7" | bc)
+
+	if ((  $(echo $newBrightness'<80' | bc -l) )); then
+		newContrast=$(echo "23 + $newBrightness * 0.7" | bc)
 	fi
 
 	if ((  $(echo $newBrightness'<50' | bc -l) )); then
-		newContrast=$(echo "15 + $newBrightness * 0.9" | bc)
+		newContrast=$(echo "28 + $newBrightness * 0.6" | bc)
 	fi
 
 	if ((  $(echo $newBrightness'<20' | bc -l) )); then
@@ -49,10 +50,10 @@ setDisplays() {
 	fi
 
 	$lg4k -b $newBrightness -c $newContrast > /dev/null &
-	$lg1080 -b $(echo "$newContrast * 0.7" | bc) -c $(echo "$newContrast * 0.6969 * 0.7" | bc) > /dev/null &
-	/Applications/OSDisplay.app/Contents/MacOS/OSDisplay -i brightness -l $newBrightness -d 1.0	
-	echo $newBrightness > current.txt
+	$lg1080 -b $(echo "$newBrightness * 1" | bc) -c $(echo "$newContrast * 0.5" | bc) > /dev/null &
+	echo $newBrightness > /Users/filippo/.brightness
 	echo $newBrightness $newContrast
+	/Applications/OSDisplay.app/Contents/MacOS/OSDisplay -i brightness -l $newBrightness -d 1.0	> /dev/null 2>/dev/null &
 }
 
 case "$1" in
